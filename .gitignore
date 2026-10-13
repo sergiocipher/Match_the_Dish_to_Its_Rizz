@@ -1,0 +1,62 @@
+# ── Competition data (AGENTS.md Hard Rule 6: never commit images) ──────────
+# Ignore everything inside data/ but keep the stub so the dir exists on clone
+data/*
+!data/.gitkeep
+
+# ── Generated artifacts (large binary files) ─────────────────────────────
+# Ignore contents of each subdirectory but keep the .gitkeep stubs
+artifacts/features/*
+!artifacts/features/.gitkeep
+
+artifacts/checkpoints/*
+!artifacts/checkpoints/.gitkeep
+
+artifacts/oof_preds/*
+!artifacts/oof_preds/.gitkeep
+
+artifacts/submissions/*
+!artifacts/submissions/.gitkeep
+
+# Keep the top-level artifacts stub
+!artifacts/.gitkeep
+
+# ── Report figures (generated; can be large) ─────────────────────────────
+reports/figures/*.png
+reports/figures/*.jpg
+!reports/figures/.gitkeep
+
+# ── Python ─────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# ── Jupyter ────────────────────────────────────────────────────────────────
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# ── Virtual environment ────────────────────────────────────────────────────
+.venv/
+venv/
+env/
+ENV/
+
+# ── Environment / secrets ─────────────────────────────────────────────────
+.env
+
+# ── IDEs ───────────────────────────────────────────────────────────────────
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# ── Misc ───────────────────────────────────────────────────────────────────
+*.log
+*.tmp
+*.bak

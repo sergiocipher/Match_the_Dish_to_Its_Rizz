@@ -1,0 +1,38 @@
+# requirements.txt – pinned library versions for the food-retrieval project.
+#
+# AGENTS.md Hard Rule 11: record library versions at the top of every notebook.
+# Keep this file in sync with what is actually installed in your environment.
+#
+# Install:
+#   pip install -r requirements.txt
+#
+# On Kaggle: upload this repo as a Dataset; the environment already has most
+# packages.  Add any missing ones via a notebook !pip install cell.
+
+# ── Core ML ────────────────────────────────────────────────────────────────
+torch==2.2.2
+torchvision==0.17.2
+torchaudio==2.2.2          # optional; remove if not needed
+
+# ── Vision / CLIP ──────────────────────────────────────────────────────────
+timm==0.9.16
+open-clip-torch==2.24.0
+
+# ── Scientific Python ──────────────────────────────────────────────────────
+numpy==1.26.4
+scikit-learn==1.4.2
+scipy==1.13.0
+pandas==2.2.2
+Pillow==10.3.0
+matplotlib==3.8.4
+
+# ── Config / utilities ─────────────────────────────────────────────────────
+PyYAML==6.0.1
+tqdm==4.66.2
+
+# ── Notebook ───────────────────────────────────────────────────────────────
+ipykernel==6.29.4
+jupyterlab==4.1.8
+
+# ── Testing ────────────────────────────────────────────────────────────────
+pytest==8.1.1

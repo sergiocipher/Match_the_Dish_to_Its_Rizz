@@ -1,0 +1,72 @@
+# clip_zeroshot.yaml – Phase 3 zero-shot VLM config.
+#
+# Tries several OpenCLIP checkpoints; features cached per model.
+# No training – pure zero-shot cosine scoring with prompt ensembling.
+# Expected validation R-precision: 0.70–0.85 depending on model size.
+
+experiment:
+  id: "E002"
+  name: "clip_zeroshot"
+  phase: 3
+  description: "OpenCLIP ViT-L/14 zero-shot with prompt ensembling and softmax-over-categories scoring."
+
+seed: 42
+
+# ── Models to evaluate (tried in order; cache features for top 2–3) ───────
+models:
+  - name: "ViT-L-14"
+    pretrained: "openai"
+    input_size: 224
+    tag: "vitl14_openai"
+  - name: "ViT-L-14"
+    pretrained: "laion2b_s32b_b82k"
+    input_size: 224
+    tag: "vitl14_laion2b"
+  - name: "ViT-H-14"
+    pretrained: "laion2b_s32b_b79k"
+    input_size: 224
+    tag: "vith14_laion2b"
+  - name: "ViT-SO400M-14-SigLIP"
+    pretrained: "webli"
+    input_size: 224
+    tag: "siglip_so400m"
+  # Uncomment if GPU VRAM allows (>= 24 GB):
+  # - name: "ViT-bigG-14"
+  #   pretrained: "laion2b_s39b_b160k"
+  #   input_size: 224
+  #   tag: "vitbigg14_laion2b"
+
+# ── Prompt templates (averaged per category) ──────────────────────────────
+prompt_templates:
+  - "a photo of {name}, a type of food."
+  - "a close-up photo of {name}."
+  - "{name}, a dish."
+  - "a picture of {name}."
+  - "food: {name}."
+  - "a delicious {name}."
+  - "a serving of {name}."
+
+use_alternative_names: true       # also encode alternative_names per category
+use_category_description: true    # also encode the long category description text
+
+# ── TTA ───────────────────────────────────────────────────────────────────
+tta:
+  enabled: true
+  methods: ["hflip"]              # ["hflip", "five_crop"] – five_crop is slower
+
+# ── Scoring ────────────────────────────────────────────────────────────────
+scoring:
+  softmax_over_categories: true   # strongly recommended (penalises look-alikes)
+  temperature: 1.0                # tune on validation; start at 1.0
+  use_sinkhorn: false             # Phase 6 only
+  use_knn: false                  # Phase 6 only
+
+# ── Data ──────────────────────────────────────────────────────────────────
+data:
+  batch_size: 128
+  num_workers: 4
+  pin_memory: true
+
+# ── Output ────────────────────────────────────────────────────────────────
+output:
+  submission_name: "clip_zeroshot_vitl14"

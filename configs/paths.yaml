@@ -1,0 +1,29 @@
+# paths.yaml – Path resolution for local vs Kaggle environments.
+#
+# src/config.py reads this at startup and overrides data_dir / out_dir
+# depending on whether ON_KAGGLE is True.  Do NOT hardcode absolute paths
+# anywhere else in the codebase; always use cfg["paths"]["data_dir"] etc.
+#
+# To change the competition slug (e.g. if the Kaggle slug differs), set the
+# COMPETITION_SLUG environment variable before launching the notebook.
+
+competition_slug: "food-text-to-image-retrieval"
+
+# Local paths (relative to the project root; resolved to absolute in config.py)
+local:
+  data_dir: "data"
+  out_dir: "artifacts"
+
+# Kaggle paths (automatically used when /kaggle/input exists)
+kaggle:
+  data_dir: "/kaggle/input/food-text-to-image-retrieval"
+  out_dir: "/kaggle/working"
+  src_dataset: "/kaggle/input/food-retrieval-src"   # add to sys.path
+
+# Sub-directories under out_dir (created by ensure_dirs)
+subdirs:
+  features: "features"
+  checkpoints: "checkpoints"
+  submissions: "submissions"
+  oof_preds: "oof_preds"
+  figures: "reports/figures"

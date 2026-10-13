@@ -1,0 +1,57 @@
+# baseline.yaml – Phase 1 starter baseline config.
+#
+# Reproduces the starter: ImageNet ResNet-50 + linear classifier on train
+# images + dish-name exact text matching.
+# Expected validation R-precision ≈ 0.50 (LB ≈ 0.50).
+
+experiment:
+  id: "E001"
+  name: "resnet50_linear_baseline"
+  phase: 1
+  description: "ImageNet ResNet-50 feature extractor + logistic regression + surface-form text matching."
+
+seed: 42
+
+# ── Model ──────────────────────────────────────────────────────────────────
+model:
+  backend: "timm"
+  name: "resnet50.a1_in1k"         # generic ImageNet weights – NOT food-specific
+  pretrained: true
+  num_classes: 0                   # remove classifier head; use as feature extractor
+  input_size: 224
+  # CLIP-style normalisation is NOT used here; use ImageNet defaults
+  mean: [0.485, 0.456, 0.406]
+  std:  [0.229, 0.224, 0.225]
+
+# ── Text matching ──────────────────────────────────────────────────────────
+text_matching:
+  method: "surface"                # "surface" | "embedding" | "combined"
+  fallback: false                  # no embedding fallback for baseline
+
+# ── Linear probe ──────────────────────────────────────────────────────────
+linear_probe:
+  C: 1.0                           # sklearn LogisticRegression regularisation
+  max_iter: 1000
+  solver: "lbfgs"
+  multi_class: "multinomial"
+
+# ── Data ──────────────────────────────────────────────────────────────────
+data:
+  train_split: "train"
+  val_gallery_split: "val"
+  test_gallery_split: "test"
+  image_size: 224
+  batch_size: 64
+  num_workers: 2
+
+# ── Scoring ────────────────────────────────────────────────────────────────
+scoring:
+  softmax_over_categories: true    # score = softmax(logits)[category] – usually beats raw cosine
+  temperature: 1.0                 # calibrated later
+  use_sinkhorn: false
+  use_knn: false
+
+# ── Output ────────────────────────────────────────────────────────────────
+output:
+  features_tag: "resnet50_in1k"
+  submission_name: "baseline_resnet50"

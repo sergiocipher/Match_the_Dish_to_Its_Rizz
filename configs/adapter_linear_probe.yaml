@@ -1,0 +1,56 @@
+# adapter_linear_probe.yaml – Phase 4 frozen-feature adapter config.
+#
+# Operates entirely on cached features (no GPU needed for the training loop).
+# Tune C / alpha / temperature on validation with 5-fold CV on train.
+
+experiment:
+  id: "E003"
+  name: "adapter_linear_probe"
+  phase: 4
+  description: "Logistic regression + prototype + Tip-Adapter on cached CLIP ViT-L/14 features, WiSE-FT blended with zero-shot."
+
+seed: 42
+
+# ── Features to use ───────────────────────────────────────────────────────
+features:
+  model_tag: "vitl14_openai"      # must match a tag in clip_zeroshot.yaml / cached features
+  l2_normalize: true
+
+# ── Logistic regression ───────────────────────────────────────────────────
+logistic_regression:
+  C_values: [0.01, 0.1, 1.0, 10.0, 100.0]   # grid search on 5-fold CV
+  max_iter: 2000
+  solver: "lbfgs"
+  multi_class: "multinomial"
+  label_smoothing: 0.1
+
+# ── Tip-Adapter cache model ────────────────────────────────────────────────
+tip_adapter:
+  beta_values: [1.0, 3.0, 5.5, 10.0]        # sharpness of cache affinity
+  alpha_values: [0.5, 1.0, 2.0]             # blend with zero-shot logits
+
+# ── WiSE-FT blend ─────────────────────────────────────────────────────────
+wise_ft:
+  alpha_values: [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+
+# ── Cross-validation ──────────────────────────────────────────────────────
+cv:
+  n_folds: 5
+  stratified: true
+  seeds: [42, 7, 123]             # run with ≥3 seeds for variance estimate
+
+# ── Label noise handling ───────────────────────────────────────────────────
+label_noise:
+  flag_threshold: 0.9             # flag train samples where OOF p(wrong class) > threshold
+  drop_flagged: false             # set true only after confirming gain on clean val set
+
+# ── Scoring ────────────────────────────────────────────────────────────────
+scoring:
+  softmax_over_categories: true
+  temperature: 1.0                # fit with fit_temperature() on train OOF
+  use_sinkhorn: false
+  use_knn: false
+
+# ── Output ────────────────────────────────────────────────────────────────
+output:
+  submission_name: "adapter_logreg_wiseft"

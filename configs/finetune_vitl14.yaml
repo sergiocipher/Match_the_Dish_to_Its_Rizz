@@ -1,0 +1,110 @@
+# finetune_vitl14.yaml – Phase 5 full / partial fine-tuning config.
+#
+# AGENTS.md Phase 5 recipe:
+#   Stage A: head only (backbone frozen), LR ≈ 1e-3, few epochs.
+#   Stage B: unfreeze last N blocks with LLRD, backbone LR ≈ 1e-5.
+#   Stage C (optional): full fine-tune at 1e-6 only if val keeps improving.
+#
+# Requires GPU.  Cache features FIRST (run clip_zeroshot.yaml notebook)
+# then only fine-tune if it clearly beats the adapter baseline on validation.
+
+experiment:
+  id: "E004"
+  name: "finetune_vitl14_openai"
+  phase: 5
+  description: "OpenCLIP ViT-L/14 (openai) partial fine-tune: head-only stage A then LLRD stage B. AMP, EMA, cosine LR, label smoothing 0.1."
+
+seed: 42
+
+# ── Backbone ──────────────────────────────────────────────────────────────
+model:
+  backend: "open_clip"
+  name: "ViT-L-14"
+  pretrained: "openai"
+  input_size: 224
+  # CLIP normalisation constants
+  mean: [0.48145466, 0.4578275, 0.40821073]
+  std:  [0.26862954, 0.26130258, 0.27577711]
+
+# ── Stage A: head-only ─────────────────────────────────────────────────────
+stage_a:
+  n_epochs: 5
+  freeze_backbone: true
+  head_lr: 1.0e-3
+  weight_decay: 0.05
+  label_smoothing: 0.1
+  batch_size: 64
+
+# ── Stage B: partial unfreeze with LLRD ───────────────────────────────────
+stage_b:
+  n_epochs: 15
+  n_unfrozen_blocks: 4            # last N transformer blocks unfrozen
+  backbone_base_lr: 1.0e-5
+  head_lr: 1.0e-3
+  llrd_decay: 0.75                # per-layer LR decay factor
+  weight_decay: 0.05
+  label_smoothing: 0.1
+  batch_size: 64
+  grad_accumulation_steps: 2      # effective batch = 128
+
+# ── Stage C: optional full fine-tune ─────────────────────────────────────
+stage_c:
+  enabled: false                  # only enable if val keeps improving in stage B
+  n_epochs: 5
+  lr: 5.0e-6
+  weight_decay: 0.05
+
+# ── Optimiser & schedule ──────────────────────────────────────────────────
+optimizer:
+  type: "adamw"
+  betas: [0.9, 0.999]
+  eps: 1.0e-8
+
+schedule:
+  warmup_ratio: 0.05              # 5% of total steps
+  floor_ratio: 0.01               # final LR = peak_lr * 0.01
+
+# ── Regularisation ────────────────────────────────────────────────────────
+regularisation:
+  ema_decay: 0.9999
+  grad_clip: 1.0
+  drop_path_rate: 0.1
+  mixup_alpha: 0.2
+  cutmix_alpha: 0.0               # set to 1.0 to enable CutMix instead
+  use_amp: true
+
+# ── Augmentation ──────────────────────────────────────────────────────────
+augmentation:
+  random_resized_crop:
+    scale: [0.5, 1.0]
+    ratio: [0.75, 1.333]
+  horizontal_flip: true
+  color_jitter:
+    brightness: 0.2
+    contrast: 0.2
+    saturation: 0.2
+    hue: 0.05
+  rand_augment: false             # set true for additional strength
+
+# ── Early stopping ────────────────────────────────────────────────────────
+early_stopping:
+  patience: 5
+  monitor: "val_r_precision"      # higher is better
+
+# ── Data ──────────────────────────────────────────────────────────────────
+data:
+  num_workers: 4
+  pin_memory: true
+  persistent_workers: true
+
+# ── Scoring ────────────────────────────────────────────────────────────────
+scoring:
+  softmax_over_categories: true
+  temperature: 1.0
+  use_sinkhorn: false
+  use_knn: false
+
+# ── Output ────────────────────────────────────────────────────────────────
+output:
+  checkpoint_tag: "vitl14_openai_ft"
+  submission_name: "finetune_vitl14_openai"
