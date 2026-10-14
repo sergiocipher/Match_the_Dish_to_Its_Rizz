@@ -218,7 +218,7 @@ class QueryDataset:
 
     def __getitem__(self, idx: int) -> tuple[str, str, int]:
         row = self.df.iloc[idx]
-        cat_id = int(row["category_id"]) if "category_id" in row and pd.notna(row["category_id"]) else -1
+        cat_id = str(row["category_id"]) if "category_id" in row and pd.notna(row["category_id"]) else ""
         return str(row["description"]), str(row["query_id"]), cat_id
 
 
@@ -247,8 +247,8 @@ def build_category_index(
     Works for either train or validation gallery.
     """
     merged = gallery_df.merge(train_df[["image_id", "category_id"]], on="image_id", how="left")
-    index: dict[int, list[str]] = {}
+    index: dict[str, list[str]] = {}
     for _, row in merged.iterrows():
-        cat = int(row["category_id"])
+        cat = str(row["category_id"])
         index.setdefault(cat, []).append(str(row["image_id"]))
     return index

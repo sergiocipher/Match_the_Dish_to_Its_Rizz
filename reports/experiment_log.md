@@ -36,8 +36,8 @@ See AGENTS.md §11 for the template and §12 for submission checklist.
 
 ## State of project (updated each session)
 
-> *Last updated: (fill in)*
+> *Last updated: 2026-10-14*
 >
-> **Current status:** Skeleton created. Phase 0 (EDA) and Phase 1 (metrics + baseline) are next.
+> **Current status:** Phase 0 (EDA) ✓ and Phase 2 (text matching) ✓ complete. Text matcher hits 100% on train + val + test queries with zero unmatched test queries.
 >
-> **Next step:** Run `00_eda.ipynb` to verify data facts (category count, gallery sizes, class balance, confusable groups).
+> **Next step:** Phase 1 baseline — install timm/scikit-learn in venv, extract ResNet-50 features, fit logistic regression, evaluate val R-precision.

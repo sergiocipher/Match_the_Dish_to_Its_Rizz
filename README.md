@@ -3,8 +3,8 @@
 Kaggle competition: given a short text description of a dish, rank 20 gallery images by relevance.
 Metric: **R-precision** (fraction of the R relevant images recovered in the top-R predictions).
 
-> **State of project:** Skeleton complete. Phase 0 (EDA) is next.
-> **Next step:** Run `notebooks/00_eda.ipynb` to confirm data facts (category count, gallery sizes, confusable groups).
+> **State of project:** Phase 0 EDA ✓ | Phase 2 text matching ✓ (100% accuracy, 0 unmatched test queries). Phase 1 baseline next.
+> **Next step:** Extract ResNet-50 features → logistic regression → evaluate val R-precision (expect ~0.50).
 
 ---
 
@@ -80,13 +80,13 @@ food-retrieval/
 
 | Property | Value |
 |---|---|
-| Number of categories | TODO (100 or 101?) |
-| Train gallery | TODO images (~20 per category) |
+| Number of categories | **101** (confirmed) |
+| Train gallery | **2,000** images (~19–20 per category) |
 | Val gallery | 1,010 images (10 per category) |
 | Test gallery | 2,000 images |
 | Val queries | 202 (2 per category), R = 10 |
 | Test queries | 303 (3 per category), R ≈ 19–20 |
-| Confusable groups | pastas (N), cakes (N), rice (N), noodle soups (N), beef cuts (N) |
+| Confusable groups | pasta (5), cake/dessert (13), rice (4), noodle_soup (2), beef (5) |
 
 ---
 
