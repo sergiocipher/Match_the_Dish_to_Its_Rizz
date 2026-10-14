@@ -23,6 +23,8 @@ See AGENTS.md §11 for the template and §12 for submission checklist.
 | ID | Date | Phase | Model / Method | Key Config | Seeds | Val R-prec | mAP@20 | P@5 | Hit@1 | Hit@5 | MRR@20 | Notes / Decision |
 |----|------|-------|----------------|------------|-------|-----------|--------|-----|-------|-------|--------|-----------------|
 | E001 | 2026-10-14 | 1 | ResNet-50 + LogReg + surface-form text matching | C=1.0, lbfgs, seed=42 | 42 | 0.4277 | 0.4054 | 0.5861 | 0.7426 | 0.9604 | 0.8383 | Baseline. Below expected ~0.50 R-prec; Hit@1=0.74 shows images are ranked near top. Move to CLIP zero-shot. |
+| E002 | 2026-10-14 | 3 | ViT-L/14 (openai) zero-shot | prompt_ensemble, softmax, TTA=hflip, T=1.0, seed=42 | 42 | 0.8109 | 0.8466 | 0.9366 | 0.9802 | 1.0000 | 0.9901 | Strong zero-shot. Beat baseline by +0.38 R-prec. |
+| E003 | 2026-10-14 | 3 | SigLIP SO400M zero-shot | prompt_ensemble, softmax, TTA=hflip, T=1.0, seed=42 | 42 | 0.8871 | 0.9283 | 0.9663 | 0.9901 | 1.0000 | 0.9950 | Best so far. +0.076 over ViT-L/14. SigLIP is the stronger backbone. Use as primary. |
 
 ---
 
