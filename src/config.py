@@ -23,10 +23,24 @@ ON_KAGGLE: bool = os.path.exists("/kaggle/input")
 
 # Resolve paths at import time.  The competition slug must match the folder
 # name under /kaggle/input/ once uploaded.  Override via env var or config.
-_COMPETITION_SLUG = os.environ.get("COMPETITION_SLUG", "food-text-to-image-retrieval")
+# On Kaggle the competition data lands at /kaggle/input/competitions/<slug>/
+# which differs from the usual /kaggle/input/<slug>/ layout.
+# We probe both locations so the code works regardless of how it was added.
+def _resolve_data_dir() -> pathlib.Path:
+    candidates = [
+        pathlib.Path("/kaggle/input/competitions/match-the-dish-to-its-rizz"),
+        pathlib.Path("/kaggle/input/match-the-dish-to-its-rizz"),
+        pathlib.Path("/kaggle/input/food-text-to-image-retrieval"),
+    ]
+    for c in candidates:
+        if c.exists():
+            return c
+    # fallback to env-var slug
+    slug = os.environ.get("COMPETITION_SLUG", "match-the-dish-to-its-rizz")
+    return pathlib.Path("/kaggle/input") / slug
 
 DATA_DIR: pathlib.Path = (
-    pathlib.Path("/kaggle/input") / _COMPETITION_SLUG
+    _resolve_data_dir()
     if ON_KAGGLE
     else pathlib.Path(__file__).parent.parent / "data"
 )
