@@ -22,7 +22,7 @@ See AGENTS.md §11 for the template and §12 for submission checklist.
 
 | ID | Date | Phase | Model / Method | Key Config | Seeds | Val R-prec | mAP@20 | P@5 | Hit@1 | Hit@5 | MRR@20 | Notes / Decision |
 |----|------|-------|----------------|------------|-------|-----------|--------|-----|-------|-------|--------|-----------------|
-| E001 | YYYY-MM-DD | 1 | ResNet-50 + logistic regression + surface-form text matching | lr=1e-3, C=1.0, 10 ep | 42 | — | — | — | — | — | — | Baseline. Run `01_baseline.ipynb` to fill metrics. |
+| E001 | 2026-10-14 | 1 | ResNet-50 + LogReg + surface-form text matching | C=1.0, lbfgs, seed=42 | 42 | 0.4277 | 0.4054 | 0.5861 | 0.7426 | 0.9604 | 0.8383 | Baseline. Below expected ~0.50 R-prec; Hit@1=0.74 shows images are ranked near top. Move to CLIP zero-shot. |
 
 ---
 
