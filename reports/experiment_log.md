@@ -29,7 +29,7 @@ See AGENTS.md §11 for the template and §12 for submission checklist.
 | E005 | 2026-10-14 | 4 | Prototype (NCM) on SigLIP feats | seed=42 | 42 | 0.8564 | 0.8935 | 0.9584 | 0.9802 | 0.9901 | Below zero-shot. Not useful alone. |
 | E006 | 2026-10-14 | 4 | WiSE-FT α=0.3 (zero-shot + LogReg) on SigLIP | alpha=0.3, row-norm blend, seed=42 | 42 | 0.9287 | 0.9645 | 0.9921 | 1.0000 | 1.0000 | **Best Phase 4. Public LB=0.95112.** Selected as primary. |
 | E008 | 2026-10-14 | 6 | Sinkhorn (str=0.0..1.0) on WiSE-FT | n_iter=20, sweep 0.0-1.0 | 42 | 0.9287 | 0.9645 | 0.9921 | 1.0000 | 1.0000 | No improvement. Best str=0.0 (no change). Sinkhorn not helpful here. |
-| E009 | 2026-10-14 | 6 | kNN smoothing (alpha=0.1, k=5) on WiSE-FT | k=5, alpha=0.1 | 42 | 0.9267 | 0.9641 | 0.9921 | 1.0000 | 1.0000 | Slight degradation -0.002. Skip. Final pipeline = WiSE-FT α=0.3 only. |
+| E010 | 2026-10-14 | 5 | SigLIP SO400M fine-tuned + WiSE-FT α=0.9 | StageA=5ep + StageB=15ep(patience5), batch=8x8=64, lr_backbone=1e-5, lr_head=1e-3, LS=0.1, seed=42 | 42 | 0.8921 | 0.9304 | 0.9723 | 1.0000 | 1.0000 | 1.0000 | WORSE than Phase 4 (0.9287). Fine-tuning overfit on 2k images. REJECTED. Final = Phase 4 WiSE-FT. |
 
 ---
 

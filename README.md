@@ -3,8 +3,8 @@
 Kaggle competition: given a short text description of a dish, rank 20 gallery images by relevance.
 Metric: **R-precision** (fraction of the R relevant images recovered in the top-R predictions).
 
-> **State of project:** Phase 0 EDA ✓ | Phase 2 text matching ✓ (100% accuracy, 0 unmatched test queries). Phase 1 baseline next.
-> **Next step:** Extract ResNet-50 features → logistic regression → evaluate val R-precision (expect ~0.50).
+> **State of project:** All phases complete. Fine-tuning (Phase 5) was tried and rejected — worse than Phase 4 on val. **Final pipeline: WiSE-FT α=0.3 (SigLIP SO400M + LogReg C=100), val R-prec=0.9287, public LB=0.9511.**
+> **Next step:** Submit final candidates, complete error analysis (Phase 7), write report.
 
 ---
 
@@ -126,11 +126,12 @@ See AGENTS.md §2 for the full list. Key points:
 
 | Method | Val R-prec | mAP@20 | P@5 | Hit@1 | MRR@20 |
 |---|---|---|---|---|---|
-| ResNet-50 baseline | — | — | — | — | — |
-| CLIP ViT-L/14 zero-shot | — | — | — | — | — |
-| + LogReg adapter | — | — | — | — | — |
-| + WiSE-FT blend | — | — | — | — | — |
-| + Ensemble + Sinkhorn | — | — | — | — | — |
+| ResNet-50 baseline | 0.4277 | 0.4054 | 0.5861 | 0.7426 | 0.8383 |
+| CLIP ViT-L/14 zero-shot | 0.8109 | 0.8466 | 0.9366 | 0.9802 | 0.9901 |
+| SigLIP SO400M zero-shot | 0.8871 | 0.9283 | 0.9663 | 0.9901 | 0.9950 |
+| + LogReg C=100 adapter | 0.9168 | 0.9601 | 0.9921 | 1.0000 | 1.0000 |
+| **+ WiSE-FT α=0.3 (final)** | **0.9287** | **0.9645** | **0.9921** | **1.0000** | **1.0000** |
+| Fine-tuned SigLIP + WiSE-FT α=0.9 | 0.8921 | 0.9304 | 0.9723 | 1.0000 | 1.0000 |
 
 ---
 
