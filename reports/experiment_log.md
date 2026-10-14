@@ -25,6 +25,10 @@ See AGENTS.md §11 for the template and §12 for submission checklist.
 | E001 | 2026-10-14 | 1 | ResNet-50 + LogReg + surface-form text matching | C=1.0, lbfgs, seed=42 | 42 | 0.4277 | 0.4054 | 0.5861 | 0.7426 | 0.9604 | 0.8383 | Baseline. Below expected ~0.50 R-prec; Hit@1=0.74 shows images are ranked near top. Move to CLIP zero-shot. |
 | E002 | 2026-10-14 | 3 | ViT-L/14 (openai) zero-shot | prompt_ensemble, softmax, TTA=hflip, T=1.0, seed=42 | 42 | 0.8109 | 0.8466 | 0.9366 | 0.9802 | 1.0000 | 0.9901 | Strong zero-shot. Beat baseline by +0.38 R-prec. |
 | E003 | 2026-10-14 | 3 | SigLIP SO400M zero-shot | prompt_ensemble, softmax, TTA=hflip, T=1.0, seed=42 | 42 | 0.8871 | 0.9283 | 0.9663 | 0.9901 | 1.0000 | 0.9950 | Best so far. +0.076 over ViT-L/14. SigLIP is the stronger backbone. Use as primary. |
+| E004 | 2026-10-14 | 4 | LogReg C=100.0 on SigLIP feats | C=100.0, lbfgs, seed=42 | 42 | 0.9168 | 0.9601 | 0.9921 | 1.0000 | 1.0000 | +0.030 over zero-shot. Hit@1=1.0. |
+| E005 | 2026-10-14 | 4 | Prototype (NCM) on SigLIP feats | seed=42 | 42 | 0.8564 | 0.8935 | 0.9584 | 0.9802 | 0.9901 | Below zero-shot. Not useful alone. |
+| E006 | 2026-10-14 | 4 | WiSE-FT α=0.3 (zero-shot + LogReg) on SigLIP | alpha=0.3, row-norm blend, seed=42 | 42 | 0.9287 | 0.9645 | 0.9921 | 1.0000 | 1.0000 | **Best Phase 4. Public LB=0.95112.** Selected as primary. |
+| E007 | 2026-10-14 | 4 | Ensemble SigLIP+ViT-L/14 zero-shot | equal weights, log-prob space | 42 | 0.8752 | 0.9142 | 0.9743 | 1.0000 | 1.0000 | Worse than SigLIP alone. ViT-L/14 dilutes SigLIP. Skip in ensemble. |
 
 ---
 
