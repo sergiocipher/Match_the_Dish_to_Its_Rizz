@@ -28,7 +28,8 @@ See AGENTS.md §11 for the template and §12 for submission checklist.
 | E004 | 2026-10-14 | 4 | LogReg C=100.0 on SigLIP feats | C=100.0, lbfgs, seed=42 | 42 | 0.9168 | 0.9601 | 0.9921 | 1.0000 | 1.0000 | +0.030 over zero-shot. Hit@1=1.0. |
 | E005 | 2026-10-14 | 4 | Prototype (NCM) on SigLIP feats | seed=42 | 42 | 0.8564 | 0.8935 | 0.9584 | 0.9802 | 0.9901 | Below zero-shot. Not useful alone. |
 | E006 | 2026-10-14 | 4 | WiSE-FT α=0.3 (zero-shot + LogReg) on SigLIP | alpha=0.3, row-norm blend, seed=42 | 42 | 0.9287 | 0.9645 | 0.9921 | 1.0000 | 1.0000 | **Best Phase 4. Public LB=0.95112.** Selected as primary. |
-| E007 | 2026-10-14 | 4 | Ensemble SigLIP+ViT-L/14 zero-shot | equal weights, log-prob space | 42 | 0.8752 | 0.9142 | 0.9743 | 1.0000 | 1.0000 | Worse than SigLIP alone. ViT-L/14 dilutes SigLIP. Skip in ensemble. |
+| E008 | 2026-10-14 | 6 | Sinkhorn (str=0.0..1.0) on WiSE-FT | n_iter=20, sweep 0.0-1.0 | 42 | 0.9287 | 0.9645 | 0.9921 | 1.0000 | 1.0000 | No improvement. Best str=0.0 (no change). Sinkhorn not helpful here. |
+| E009 | 2026-10-14 | 6 | kNN smoothing (alpha=0.1, k=5) on WiSE-FT | k=5, alpha=0.1 | 42 | 0.9267 | 0.9641 | 0.9921 | 1.0000 | 1.0000 | Slight degradation -0.002. Skip. Final pipeline = WiSE-FT α=0.3 only. |
 
 ---
 
